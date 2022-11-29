@@ -390,6 +390,7 @@ public class M04_GLEventListener implements GLEventListener {
         m = Mat4.multiply(m, Mat4Transform.rotateAroundZ(0)); //(baseHeight+lArmHeight+(jointScale/2)-1)
         TransformNode headRotate = new TransformNode("head rotate", m);
         //m = new Mat4(1);
+        //--
 
 
 
