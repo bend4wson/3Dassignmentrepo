@@ -131,7 +131,7 @@ public class Model {
 
   private void calculateOffset(GL3 gl) {
     double elapsedTime = getSeconds() - startTime;
-    double time = elapsedTime * 0.3;
+    double time = elapsedTime * 0.025;
     float offsetX = (float) (time - Math.floor(time));
     float offsetY = 0.0f;
     shader.setFloat(gl, "offset", offsetX, offsetY);

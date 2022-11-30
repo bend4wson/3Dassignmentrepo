@@ -54,14 +54,19 @@ public class M04_GLEventListener implements GLEventListener {
     GL3 gl = drawable.getGL().getGL3();
     light1.dispose(gl);
     light2.dispose(gl);
+    light3.dispose(gl);
+    light4.dispose(gl);
     ttWall.dispose(gl);
     ttWindow.dispose(gl);
     ttFloor.dispose(gl);
     ttBackground.dispose(gl);
+    ttCeiling.dispose(gl);
     cube.dispose(gl);
     cube2.dispose(gl);
     cube3.dispose(gl);
     cube4.dispose(gl);
+    cube5.dispose(gl);
+    cube6.dispose(gl);
     tableLeg.dispose(gl);
     // tableLeg.dispose(gl);
     // tableLeg.dispose(gl);
@@ -116,13 +121,15 @@ public class M04_GLEventListener implements GLEventListener {
 
   private Camera camera;
   private Mat4 perspective;
-  private Model ttBackground;
-  private Light light1, light2;
-  private Model cube, cube2, cube3, cube4, sphere, jointSphere, tableLeg, ttWall, ttFloor, ttWindow;
+  //light1/light2 should be part of scene graph for lamps
+  private Light light1, light2, light3, light4;
+  private Model cube, cube2, cube3, cube4, cube5, cube6, sphere, jointSphere, tableLeg, ttWall, ttFloor, ttWindow, ttCeiling, ttBackground;
   //private int frame = 1;
 
   private SGNode branchRoot, lamp1Root, lamp2Root;
-  private TransformNode translateEgg, rotateEggZ, rotateEggY, lamp1MoveTranslate, rotateLamp, translateLamp2, lArmTransform, rotateLowerZ, rotateLowerY, rotateUpper, uArmTranslate, rotateHead; //, uArmTranslate;//, lArm;//Transform;
+  private TransformNode translateEgg, rotateEggZ, rotateEggY;
+  private TransformNode lamp1MoveTranslate, rotateLamp, lArmTransform, rotateLowerZ, rotateLowerY, rotateUpper, uArmTranslate, rotateHead; //, uArmTranslate;//, lArm;//Transform;
+  private TransformNode lamp2MoveTranslate, rotateLamp2, lArm2Transform, rotateLowerZ2, rotateLowerY2, rotateUpper2, uArm2Translate, rotateHead2;
 
   private static final boolean DISPLAY_SHADERS = false;
   private Shader shader;
@@ -134,6 +141,7 @@ public class M04_GLEventListener implements GLEventListener {
   // private float headAngleZ = 0;
   private float xPosition = 0;
   private float upperAngle = -60;
+  private float upperAngle2 = 60;
   // private float lArmTranslateZ = 0;
   // private float lArmTranslateX = -4.9f;  
 
@@ -165,23 +173,31 @@ public class M04_GLEventListener implements GLEventListener {
 
     Mesh mesh = new Mesh(gl, TwoTriangles.vertices.clone(), TwoTriangles.indices.clone());
     Shader shader = new Shader(gl, "vs_tt_05.txt", "fs_tt_05.txt");
+    Shader shaderStatic = new Shader(gl, "vs_tt_05_static.txt", "fs_tt_05.txt");
 
     //int[] textureId0 = TextureLibrary.loadTexture(gl, "textures/chequerboard.jpg");
     int[] textureId1 = TextureLibrary.loadTexture(gl, "textures/jade.jpg");
     int[] textureId2 = TextureLibrary.loadTexture(gl, "textures/jade_specular.jpg");
     int[] textureId3 = TextureLibrary.loadTexture(gl, "textures/container2.jpg");
-    int[] textureId4 = TextureLibrary.loadTexture(gl, "textures/container2_specular.jpg");
+    int[] textureId4 = TextureLibrary.loadTexture(gl, "textures/woodCeiling3.jpg");
     //int[] textureId5 = TextureLibrary.loadTexture(gl, "textures/wattBook.jpg");
     int[] textureId6 = TextureLibrary.loadTexture(gl, "textures/wattBook_specular.jpg");
     int[] textureId7 = TextureLibrary.loadTexture(gl, "textures/ear0xuu2.jpg");
     int[] textureId8 = TextureLibrary.loadTexture(gl, "textures/cloud2.jpg");
-    int[] textureId9 = TextureLibrary.loadTexture(gl, "textures/blizzardBackground.jpg");
+    int[] textureId9 = TextureLibrary.loadTexture(gl, "textures/medievalTown.jpg");
     int[] textureId0 = TextureLibrary.loadTexture(gl, "textures/mar0kuu2_specular.jpg");
+    int[] textureId11 = TextureLibrary.loadTexture(gl, "textures/woodWallColours.jpg");
+    int[] textureId12 = TextureLibrary.loadTexture(gl, "textures/woodFloor2.jpg");
+    int[] textureId13 = TextureLibrary.loadTexture(gl, "textures/woodCeiling3.jpg");
 
     light1 = new Light(gl);
     light1.setCamera(camera);
     light2 = new Light(gl);
     light2.setCamera(camera);
+    light3 = new Light(gl);
+    light3.setCamera(camera);
+    light4 = new Light(gl);
+    light4.setCamera(camera);
 
 //----------------------//----------------------//----------------------//----------------------//----------------------
     // double elapsedTime = getSeconds() - startTime;
@@ -208,11 +224,11 @@ public class M04_GLEventListener implements GLEventListener {
 
     Material material = new Material(new Vec3(0.0f, 0.5f, 0.81f), new Vec3(1.0f, 1.0f, 1.0f), new Vec3(0.3f, 0.3f, 0.3f), 32.0f);
     Mat4 modelMatrix = Mat4Transform.scale(16,1f,16);
-    ttFloor = new Model(gl, camera, light1, shader, material, modelMatrix, mesh, textureId3);
-    ttWindow = new Model(gl, camera, light1, shader, material, modelMatrix, mesh, textureId8);
-    ttWall = new Model(gl, camera, light1, shader, material, modelMatrix, mesh, textureId3);
+    ttFloor = new Model(gl, camera, light1, shaderStatic, material, modelMatrix, mesh, textureId12);
+    ttWindow = new Model(gl, camera, light1, shaderStatic, material, modelMatrix, mesh, textureId11);
+    ttWall = new Model(gl, camera, light1, shaderStatic, material, modelMatrix, mesh, textureId11);
     ttBackground = new Model(gl, camera, light1, shader, material, modelMatrix, mesh, textureId9);
-
+    ttCeiling = new Model(gl, camera, light3, shaderStatic, material, modelMatrix, mesh, textureId13);
 
     mesh = new Mesh(gl, Cube.vertices.clone(), Cube.indices.clone());
     shader = new Shader(gl, "vs_cube_04.txt", "fs_cube_04.txt");
@@ -222,8 +238,10 @@ public class M04_GLEventListener implements GLEventListener {
     cube2 = new Model(gl, camera, light1, shader, material, modelMatrix, mesh, textureId0, textureId0);
     cube3 = new Model(gl, camera, light1, shader, material, modelMatrix, mesh, textureId0, textureId0);
     cube4 = new Model(gl, camera, light1, shader, material, modelMatrix, mesh, textureId0, textureId0);
+    cube5 = new Model(gl, camera, light1, shader, material, modelMatrix, mesh, textureId0, textureId0);
+    cube6 = new Model(gl, camera, light1, shader, material, modelMatrix, mesh, textureId3, textureId3);
 
-    tableLeg = new Model(gl, camera, light1, shader, material, modelMatrix, mesh, textureId3, textureId4);
+    tableLeg = new Model(gl, camera, light1, shader, material, modelMatrix, mesh, textureId13, textureId13);
 
     mesh = new Mesh(gl, Sphere.vertices.clone(), Sphere.indices.clone());
     shader = new Shader(gl, "vs_cube_04.txt", "fs_cube_04.txt");
@@ -288,7 +306,7 @@ public class M04_GLEventListener implements GLEventListener {
     // rotateHead = new TransformNode("Rotate Head", Mat4Transform.translate(xPosition, 0, 0));
 
 
-    rotateHead = new TransformNode("Rotate Lower",Mat4Transform.translate(xPosition,0,0));
+    rotateHead = new TransformNode("Rotate Head",Mat4Transform.translate(xPosition,0,0));
     
     
     //branchRoot = new NameNode("sphere-branch-structure");
@@ -316,7 +334,7 @@ public class M04_GLEventListener implements GLEventListener {
         //Mat4 m = Mat4Transform.scale(baseScale,baseHeight,baseScale);
         m = Mat4.multiply(m, Mat4Transform.translate(0f,(float)(baseHeight/2),0f));
         TransformNode baseTransform = new TransformNode("base transform", m);
-          ModelNode baseShape = new ModelNode("Cube(base)", cube);
+          ModelNode baseShape = new ModelNode("Cube(base)", cube5);
         //TransformNode baseRotate = new TransformNode("base rotate", m);
 
     //rotateLowerZ = new TransformNode("Rotate Lower",Mat4Transform.translate(xPosition,0,0));
@@ -449,101 +467,158 @@ public class M04_GLEventListener implements GLEventListener {
   //For the second lamp (CREATE NEW CLASS FOR IT):
 
   private SGNode createLamp2(Mat4 m) {
-    // \/\/ REPEATED for the second lamp
-    float baseHeight = 0.35f;
-    float baseScale = 1.5f;
-    float jointScale = 0.75f;
-    float headHeight = 0.5f;
-    float headWidth = 0.75f;
-    float headDepth = 1.5f;
-    float uArmHeight = 2.5f;
-    float uArmScale = 0.35f;
-    float lArmHeight = 2.5f;
-    float lArmScale = 0.35f;
-    // --------------------------------
+    float base2Height = 0.35f;
+    float base2Scale = 1.5f;
+    float joint2Scale = 0.75f;
+    float head2Height = 0.5f;
+    float head2Width = 0.75f;
+    float head2Depth = 1.5f;
+    float uArm2Height = 2.5f;
+    float uArm2Scale = 0.35f;
+    float lArm2Height = 2.5f;
+    float lArm2Scale = 0.35f;
 
-    lamp2Root = new NameNode("lamp-branch-structure");
-    translateLamp2 = new TransformNode("lamp 2 transform",Mat4Transform.translate(-xPosition,0,0));
+    lamp2Root = new NameNode("lamp-2-branch-structure");
+    //translateLamp = new TransformNode("lamp 1 transform",Mat4Transform.translate(xPosition,0,0));
+    lArm2Transform = new TransformNode("lArm 2 transform",Mat4Transform.translate(-xPosition,0,0));
+    // rotateUpper = new TransformNode("Rotate Upper Lamp1",Mat4Transform.translate(xPosition,0,0));
+    // rotateLowerZ = new TransformNode("Rotate Lower Lamp1Z",Mat4Transform.translate(xPosition,0,0));
+    // rotateHead = new TransformNode("Rotate Head", Mat4Transform.translate(xPosition, 0, 0));
+
+
+    rotateHead2 = new TransformNode("Rotate Head 2",Mat4Transform.translate(-xPosition,0,0));
     
     
     //branchRoot = new NameNode("sphere-branch-structure");
 
-    TransformNode lamp2Translate = new TransformNode("lamp 2 transform",Mat4Transform.translate(-xPosition,0,0));
+                                                                                                //Prev (xPosition, 0, 0)
+    rotateLamp2 = new TransformNode("lamp 2 translate",Mat4Transform.translate(-xPosition,0,0));
+    lamp2MoveTranslate = new TransformNode("lamp 2 move translate",Mat4Transform.translate(5f,0,0));
 
 
     NameNode base2 = new NameNode("base2");
         m = new Mat4(1);
-        m = Mat4.multiply(m, Mat4Transform.scale(baseScale,baseHeight,baseScale));
-        m = Mat4.multiply(m, Mat4Transform.translate(3.8f,0.5f,-0));
+
+        //m = Mat4.multiply(m, Mat4Transform.rotateAroundY(0));
+        m = Mat4.multiply(m, Mat4Transform.rotateAroundZ(-30));
+        //TransformNode rotateLowerZ = new TransformNode("lower lamp1 rotate", m);
+        rotateLowerZ2 = new TransformNode("lower lamp2 rotate Z", m);
+
+        m = new Mat4(1);
+        m = Mat4.multiply(m, Mat4Transform.rotateAroundY(-0));
+        rotateLowerY2 = new TransformNode("lower lamp2 rotate Y", m);
+        // rotateLowerZ = new TransformNode("Rotate Lower Lamp1Z",Mat4Transform.rotateAroundZ(0));
+
+        m = new Mat4(1);
+        m = Mat4.multiply(m, Mat4Transform.scale(base2Scale,base2Height,base2Scale));
         //Mat4 m = Mat4Transform.scale(baseScale,baseHeight,baseScale);
-        TransformNode base2Transform = new TransformNode("base2 transform", m);
-          ModelNode base2Shape = new ModelNode("Cube(base)", cube);
+        m = Mat4.multiply(m, Mat4Transform.translate(-0f,(float)(base2Height/2),0f));
+        TransformNode base2Transform = new TransformNode("base 2 transform", m);
+          ModelNode base2Shape = new ModelNode("Cube(base)", cube5);
+        //TransformNode baseRotate = new TransformNode("base rotate", m);
 
-    NameNode uArm2 = new NameNode("upper arm 2"); 
-        m = new Mat4(1);
-        m = Mat4.multiply(m, Mat4Transform.rotateAroundZ(30));
-        m = Mat4.multiply(m, Mat4Transform.translate(7f, (baseHeight+(uArmHeight/2)+jointScale)-2.5f,-0));
-        m = Mat4.multiply(m, Mat4Transform.scale(uArmScale,uArmHeight,uArmScale));
-        //m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
-        //rotateEggZ.setTransform(Mat4Transform.rotateAroundZ(rotateAllAngle));
-        TransformNode uArm2Transform = new TransformNode("upper arm 2 transform", m);
-          ModelNode uArm2Shape = new ModelNode("cube(base)", cube2);
+    //rotateLowerZ = new TransformNode("Rotate Lower",Mat4Transform.translate(xPosition,0,0));
 
-    NameNode joint2 = new NameNode("joint2");
-        //Mat4Transform.translate((bodyWidth*0.5f)+(armScale*0.5f),bodyHeight,0));
-        //leftArmRotate = new TransformNode("leftarm rotate",Mat4Transform.rotateAroundX(180));
-        m = new Mat4(1);
-        m = Mat4.multiply(m, Mat4Transform.scale(jointScale,jointScale,jointScale));
-        m = Mat4.multiply(m, Mat4Transform.translate(9,(baseHeight+lArmHeight),0));
-      TransformNode joint2Transform = new TransformNode("joint 2 transform", m);
-        //TransformNode jointScale = new TransformNode("joint transform", m); 
-          ModelNode joint2Shape = new ModelNode("Sphere(joint)", jointSphere);
+    NameNode lArm2 = new NameNode("lower arm"); 
 
-    NameNode lArm2 = new NameNode("lower arm 2"); 
         m = new Mat4(1);
-        m = Mat4.multiply(m, Mat4Transform.rotateAroundZ(-30)); //(baseHeight+lArmHeight+(jointScale/2)-1)
-        // m = Mat4.multiply(m, Mat4Transform.translate(0.5f,(baseHeight+(lArmHeight/2.0f)),0));
-        // m = Mat4.multiply(m, Mat4Transform.scale(lArmScale,lArmHeight,lArmScale));
-        m = Mat4.multiply(m, Mat4Transform.translate(4.9f,(baseHeight+(lArmHeight/2.0f)+2.25f),-0));
-        m = Mat4.multiply(m, Mat4Transform.scale(lArmScale,lArmHeight,lArmScale));
+        float height2 = (base2Height+(lArm2Height/2.0f))-0.5f;
+        //float lArmFloorLen = (float)Math.sqrt((height1*height1) - (lArmHeight*lArmHeight));
+        m = Mat4.multiply(m, Mat4Transform.translate(-0f, height2, 0f)); //-4.9f-1.2f,height1,0));//(lArmFloorLen/2),height1,this.lArmTranslateZ));
+        m = Mat4.multiply(m, Mat4Transform.scale(lArm2Scale,lArm2Height,lArm2Scale));
+
         //m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));    (baseHeight+(lArmHeight/2.0f))
         TransformNode lArm2Transform = new TransformNode("lower arm 2 transform", m);
           ModelNode lArm2Shape = new ModelNode("cube(base)", cube3);
 
-      
-    NameNode head2 = new NameNode("head2");
+//Translate to origin, scale, etc.
+//When scaling something, always refer it to f.
+//Rotate should be in spearate node (if it affects nodes underneath)
+
+//Define a translate with respect to the origin of the node underneath it 
+//(i.e:(0,0,0) is the node underneath), so you just have to translate by the 
+//length of the current object you're defining.
+
+    //rotateUpper = new TransformNode("Rotate Upper", Mat4Transform.translate(xPosition,0,0));
+
+    NameNode joint2 = new NameNode("joint");
+        //Mat4Transform.translate((bodyWidth*0.5f)+(armScale*0.5f),bodyHeight,0));
+        //leftArmRotate = new TransformNode("leftarm rotate",Mat4Transform.rotateAroundX(180));
+
         m = new Mat4(1);
-        m = Mat4.multiply(m,Mat4Transform.scale(headDepth,headHeight,headWidth));
-        m = Mat4.multiply(m, Mat4Transform.translate(3.5f,(baseHeight+lArmHeight+jointScale+uArmHeight+(headHeight/2.0f))+2.5f,-0));
+        m = Mat4.multiply(m, Mat4Transform.rotateAroundZ(this.upperAngle2));
+        //System.out.println("!!!!");
+        //m = Mat4.multiply(m, Mat4Transform.rotateAroundY(0));
+        rotateUpper2 = new TransformNode("upper arm 2 rotate", m); //Mat4Transform.rotateAroundZ(-30));
+        //m = Mat4.multiply(m, Mat4Transform.rotateAroundZ(-30));
+
+        m = new Mat4(1);
+        m = Mat4.multiply(m, Mat4Transform.scale(joint2Scale,joint2Scale,joint2Scale));
+        height2 = (base2Height+lArm2Height+(float)(joint2Scale/2));
+        m = Mat4.multiply(m, Mat4Transform.translate(-0f, height2, 0f)); // -9, 2.85f, 0));
+        TransformNode joint2Transform = new TransformNode("joint 2 transform", m);
+          //TransformNode jointScale = new TransformNode("joint transform", m); 
+            ModelNode joint2Shape = new ModelNode("Sphere(joint)", jointSphere);
+        
+
+    NameNode uArm2 = new NameNode("upper arm 2"); 
+        m = new Mat4(1);
+        float rotationUpperXOffset2 = -(uArm2Height * (float)Math.sin(this.upperAngle));
+        //System.out.println("@@@ " + rotationUpperXOffset + " @@@ " + (float)Math.sin(this.upperAngle));
+        m = Mat4.multiply(m, Mat4Transform.translate(-1.5f, (float)(lArm2Height+(uArm2Height/2)-0.5f), 0f));//(lArmHeight+(uArmHeight/2)), 0f));
+        uArm2Translate = new TransformNode("upper arm 2 translate", m);
+
+        m = new Mat4(1);
+        //m = Mat4.multiply(m, Mat4Transform.translate(0f, (float)(uArmHeight/2), 0f)); //-7f, -0.15f, 0f));
+        m = Mat4.multiply(m, Mat4Transform.scale(uArm2Scale,uArm2Height,uArm2Scale));
+        //m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
+        //rotateEggZ.setTransform(Mat4Transform.rotateAroundZ(rotateAllAngle));
+        TransformNode uArm2Transform = new TransformNode("upper arm 2 transform", m);
+          ModelNode uArm2Shape = new ModelNode("cube(base)", cube2);
+      
+    NameNode head2 = new NameNode("head 2");
+        m = new Mat4(1);
       // Mat4 m = Mat4Transform.scale(headDepth,headHeight,headWidth);
+        //headHeight = baseHeight+lArmHeight+jointScale+uArmHeight+(headHeight/2.0f)+2.5f;
+        m = Mat4.multiply(m, Mat4Transform.translate(-0f, (float)((uArm2Height/2)), 0f)); //-3.5f,(baseHeight+lArmHeight+jointScale+uArmHeight+(headHeight/2.0f))+2.5f,0));
+        TransformNode translateHead2 = new TransformNode("head translate 2", m);
+
+        m = new Mat4(1);
+        m = Mat4.multiply(m, Mat4Transform.rotateAroundZ(-20)); //(baseHeight+lArmHeight+(jointScale/2)-1)
+        rotateHead2 = new TransformNode("head 2 rotate", m);
+        //m = new Mat4(1);
+
+        m = new Mat4(1);
+        m = Mat4.multiply(m,Mat4Transform.scale(head2Depth,head2Height,head2Width));
+        //m = Mat4.multiply(m, Mat4Transform.translate(0f, (float)(headHeight/2), 0f)); 
         TransformNode head2Transform = new TransformNode("head 2 transform", m);
           ModelNode head2Shape = new ModelNode("Cube(head)", cube4);
 
-    // NameNode hLight2 = new NameNode("head light 2");
-    // //light1.setPosition(getLightPosition());  // changing light position each frame
-    //     m = new Mat4(1);
-    //     m = Mat4.multiply(m, Mat4Transform.translate(4.5f, 4.4f, -0));
-    //     TransformNode hLight2Transform = new TransformNode("head light 2 transform", m);
-    //       LightNode hLight2Shape = new LightNode("Light(light2)", light2);
-
-    lamp2Root.addChild(translateLamp2);
-      translateLamp2.addChild(base2);
-        base2.addChild(base2Transform);
+    lamp2Root.addChild(lamp2MoveTranslate);
+      //Do I need lamp1MoveTranslate here?
+      lamp2MoveTranslate.addChild(rotateLamp2);
+        rotateLamp2.addChild(base2);
+          base2.addChild(base2Transform);
           base2Transform.addChild(base2Shape);
-        base2.addChild(lArm2);
-          lArm2.addChild(lArm2Transform);
-            lArm2Transform.addChild(lArm2Shape);
-          lArm2.addChild(joint2);
-            joint2.addChild(joint2Transform);
-              joint2Transform.addChild(joint2Shape);
-            joint2.addChild(uArm2);
-              uArm2.addChild(uArm2Transform);
-                uArm2Transform.addChild(uArm2Shape);
-              uArm2.addChild(head2);
-                head2.addChild(head2Transform);
-                  head2Transform.addChild(head2Shape);
-                // head2.addChild(hLight2);
-                //   hLight2Transform.addChild(hLight2Shape);
+          base2.addChild(rotateLowerY2);
+            rotateLowerY2.addChild(rotateLowerZ2);
+              rotateLowerZ2.addChild(lArm2); //Thus should rotate the lower arm, the lower arm doesn't need a rotate itself?
+                lArm2.addChild(lArm2Transform);
+                lArm2Transform.addChild(lArm2Shape);
+                //lArm.addChild(jointRotate);
+                lArm2.addChild(joint2);
+                  joint2.addChild(joint2Transform);
+                    joint2Transform.addChild(joint2Shape);
+                  joint2.addChild(uArm2Translate);
+                    uArm2Translate.addChild(rotateUpper2);
+                      rotateUpper2.addChild(uArm2);
+                        uArm2.addChild(uArm2Transform);
+                          uArm2Transform.addChild(uArm2Shape);
+                        uArm2.addChild(translateHead2);
+                          translateHead2.addChild(rotateHead2);
+                            rotateHead2.addChild(head2);
+                              head2.addChild(head2Transform);
+                                head2Transform.addChild(head2Shape);
     return lamp2Root;
   }
 
@@ -599,8 +674,17 @@ public class M04_GLEventListener implements GLEventListener {
     light2.setPosition(getLightPosition(2));  // changing light position each frame
     light2.render(gl);
 
+    light3.setPosition(getLightPosition(3));  // changing light position each frame
+    light3.render(gl);
+
+    light4.setPosition(getLightPosition(4));  // changing light position each frame
+    light4.render(gl);
+
     ttFloor.setModelMatrix(getMforTT1());       // change transform
     ttFloor.render(gl);
+
+    ttCeiling.setModelMatrix(getMforTT2());
+    ttCeiling.render(gl);
     // ttWindow.setModelMatrix(getMforTT2());       // change transform
     // ttWindow.render(gl);
     ttWall.setModelMatrix(getMforTT3());       // change transform
@@ -620,8 +704,8 @@ public class M04_GLEventListener implements GLEventListener {
     tableLeg.render(gl);
     tableLeg.setModelMatrix(getMforTableLeg4());     // change transform
     tableLeg.render(gl);
-    tableLeg.setModelMatrix(getMforEggStand());     // change transform
-    tableLeg.render(gl);
+    cube6.setModelMatrix(getMforEggStand());     // change transform
+    cube6.render(gl);
 
 
     if (animation) {
@@ -743,10 +827,14 @@ public class M04_GLEventListener implements GLEventListener {
     // float z = 5.0f*(float)(Math.cos(Math.toRadians(elapsedTime*50)));
 
     if (opt == 1) {
-      return new Vec3 (-4.5f, 4.4f, 0);
-    } else { //if (opt == 2) {
-      return new Vec3 (4.5f, 4.4f, 0);
-    } 
+      return new Vec3 (-4f, 4.5f, 0);
+    } else if (opt == 2) { //if (opt == 2) {
+      return new Vec3 (4f, 4.5f, 0);
+    } else if (opt == 3) {
+      return new Vec3 (-2f, 15.5f, 0f);
+    } else {
+      return new Vec3 (2f, 15.5f, 0f);
+    }
   }
 
 
@@ -756,6 +844,15 @@ public class M04_GLEventListener implements GLEventListener {
     float size = 16f;
     Mat4 modelMatrix = new Mat4(1);
     modelMatrix = Mat4.multiply(Mat4Transform.scale(size,1f,size), modelMatrix);
+    return modelMatrix;
+  }
+
+  private Mat4 getMforTT2() {
+    float size = 16f;
+    Mat4 modelMatrix = new Mat4(1);
+    modelMatrix = Mat4.multiply(Mat4Transform.scale(size,1f,size), modelMatrix);
+    modelMatrix = Mat4.multiply(Mat4Transform.translate(0f,size,0f), modelMatrix);
+    //modelMatrix = Mat4.multiply(Mat4Transform.rotateAroundZ(180), modelMatrix);
     return modelMatrix;
   }
 
@@ -785,7 +882,7 @@ public class M04_GLEventListener implements GLEventListener {
     Mat4 modelMatrix = new Mat4(1);
     modelMatrix = Mat4.multiply(Mat4Transform.scale(size*4, 5f, size*3), modelMatrix); //3f,size), modelMatrix);
     modelMatrix = Mat4.multiply(Mat4Transform.rotateAroundX(90), modelMatrix);
-    modelMatrix = Mat4.multiply(Mat4Transform.translate(-1.0f,size*0.7f,-size*1.5f), modelMatrix);
+    modelMatrix = Mat4.multiply(Mat4Transform.translate(-1.0f,size*0.5f,-size*2.5f), modelMatrix);
     return modelMatrix;
   }
   
@@ -925,24 +1022,87 @@ public class M04_GLEventListener implements GLEventListener {
   }
 
   public void lamp2Position1() {
-    translateLamp2.setTransform(Mat4Transform.rotateAroundY(0));
-    //lArm2Transform.setTransform(Mat4Transform.rotateAroundZ(0));
-    translateLamp2.update();
-    //lArm2Transform.update();
+    rotateLamp2.setTransform(Mat4Transform.rotateAroundY(-0));
+    rotateLamp2.update();
+
+    lamp2MoveTranslate.setTransform(Mat4Transform.translate(5f, 0f, 0f));
+    lamp2MoveTranslate.update();
+
+    uArm2Translate.setTransform(Mat4Transform.translate(-1.5f, 3.25f, 0f));
+    uArm2Translate.update();
+
+    rotateHead2.setTransform(Mat4Transform.rotateAroundZ(-20));
+    rotateHead2.update();
+
+    rotateUpper2.setTransform(Mat4Transform.rotateAroundZ(this.upperAngle2));
+    //rotateUpper.setTransform(Mat4Transform.translate(0, 0, 0.5f));
+    rotateUpper2.update();
+
+    //rotateHead.setTransform(Mat4Transform.rotateAroundZ(30));
+    rotateLowerY2.setTransform(Mat4Transform.rotateAroundY(-0));
+    rotateLowerY2.update();
+
+    //rotateHead.setTransform(Mat4Transform.rotateAroundZ(30));
+    rotateLowerZ2.setTransform(Mat4Transform.rotateAroundZ(-30));
+    rotateLowerZ2.update();
+
+    lamp2MoveTranslate.setTransform(Mat4Transform.translate(5f, 0f, 0f));
   }
 
   public void lamp2Position2() {
-    translateLamp2.setTransform(Mat4Transform.rotateAroundY(45));
-    //lArm2Transform.setTransform(Mat4Transform.rotateAroundZ(0));
-    translateLamp2.update();
-    //lArm2Transform.update();
+    rotateLamp2.setTransform(Mat4Transform.rotateAroundY(-0));
+    rotateLamp2.update();
+
+    lamp2MoveTranslate.setTransform(Mat4Transform.translate(5f, 0f, 0f));
+    lamp2MoveTranslate.update();
+
+    //rotateHead.setTransform(Mat4Transform.rotateAroundZ(30));
+    rotateLowerZ2.setTransform(Mat4Transform.rotateAroundZ(20));
+    rotateLowerZ2.update();
+
+    uArm2Translate.setTransform(Mat4Transform.translate(0.3f, (float)(3.5f), 0f));
+    uArm2Translate.update();
+
+    rotateUpper2.setTransform(Mat4Transform.rotateAroundZ(-20));
+    rotateUpper2.update();
+
+
+    // rotateHead.setTransform(Mat4Transform.rotateAroundZ(10));
+    // rotateHead.update();
+
+    rotateLowerY2.setTransform(Mat4Transform.rotateAroundY(-90));
+    rotateLowerY2.update();
+
+    lamp2MoveTranslate.setTransform(Mat4Transform.translate(5f, 0f, 0f));
+
+    rotateHead2.setTransform(Mat4Transform.rotateAroundZ(-20));
+    rotateHead2.update();
   }
 
   public void lamp2Position3() {
-    translateLamp2.setTransform(Mat4Transform.rotateAroundY(-45));
-    //lArm2Transform.setTransform(Mat4Transform.rotateAroundZ(0));
-    translateLamp2.update();
-    //lArm2Transform.update();
+    uArm2Translate.setTransform(Mat4Transform.translate(-1.5f, 3.25f, 0f));
+    uArm2Translate.update();
+
+    rotateHead2.setTransform(Mat4Transform.rotateAroundZ(-20));
+    rotateHead2.update();
+
+    rotateUpper2.setTransform(Mat4Transform.rotateAroundZ(this.upperAngle2));
+    //rotateUpper.setTransform(Mat4Transform.translate(0, 0, 0.5f));
+    rotateUpper2.update();
+
+    //rotateHead.setTransform(Mat4Transform.rotateAroundZ(30));
+    rotateLowerY2.setTransform(Mat4Transform.rotateAroundY(-0));
+    rotateLowerY2.update();
+
+    //rotateHead.setTransform(Mat4Transform.rotateAroundZ(30));
+    rotateLowerZ2.setTransform(Mat4Transform.rotateAroundZ(-30));
+    rotateLowerZ2.update();
+
+    rotateLamp2.setTransform(Mat4Transform.rotateAroundY(45));
+    rotateLamp2.update();
+
+    lamp2MoveTranslate.setTransform(Mat4Transform.translate(5f, 0f, -3f));
+    lamp2MoveTranslate.update();
     
   }
 
