@@ -747,14 +747,6 @@ public class M04_GLEventListener implements GLEventListener {
     } else { //if (opt == 2) {
       return new Vec3 (4.5f, 4.4f, 0);
     } 
-    // else  (opt == 3) {
-    //   return new Vec3 (-4.5f, 4.4f, 0);
-    // }
-
-
-    //return new Vec3 (-4.5f, 4.4f, 0);
-    //return new Vec3(x,y,z);   
-    //return new Vec3(5f,3.4f,5f);
   }
 
 
@@ -766,16 +758,6 @@ public class M04_GLEventListener implements GLEventListener {
     modelMatrix = Mat4.multiply(Mat4Transform.scale(size,1f,size), modelMatrix);
     return modelMatrix;
   }
-  
-  // // As the transforms do not change over time for this object, they could be stored once rather than continually being calculated
-  // private Mat4 getMforTT2() {
-  //   float size = 16f;
-  //   Mat4 modelMatrix = new Mat4(1);
-  //   modelMatrix = Mat4.multiply(Mat4Transform.scale(size,1f,size), modelMatrix);
-  //   modelMatrix = Mat4.multiply(Mat4Transform.rotateAroundX(90), modelMatrix);
-  //   modelMatrix = Mat4.multiply(Mat4Transform.translate(0,size*0.5f,-size*0.5f), modelMatrix);
-  //   return modelMatrix;
-  // }
 
   // As the transforms do not change over time for this object, they could be stored once rather than continually being calculated
   private Mat4 getMforTT3() {
@@ -857,71 +839,31 @@ public class M04_GLEventListener implements GLEventListener {
   }
 
   public void lamp1Position1() {  
-  // this.uArmAngleY = 0;
-  // this.uArmAngleZ = -30;
-  // this.uArmTranslateX = -7;
-  // this.uArmTranslateY = -0.15f;
-  // this.uArmTranslateZ = 0;
+    rotateLamp.setTransform(Mat4Transform.rotateAroundY(0));
+    rotateLamp.update();
 
-  // this.headAngleZ = 0;
+    lamp1MoveTranslate.setTransform(Mat4Transform.translate(-5f, 0f, 0f));
+    lamp1MoveTranslate.update();
 
-  // //this.xPosition = 0;
-  // this.lArmAngleZ = 30;
-  // this.lArmAngleY = 0;
-  // this.lArmTranslateZ = 0;
-  // this.lArmTranslateX = -4.9f;
+    uArmTranslate.setTransform(Mat4Transform.translate(1.5f, 3.25f, 0f));
+    uArmTranslate.update();
 
-  // this.jointTranslateX = -9f;
-  // this.jointTranslateY = 2.85f;
-  // this.jointTranslateZ = 0;
-  //  m = new Mat4(1);
-  //   m = Mat4.multiply(m, Mat4Transform.rotateAroundZ(this.upperAngle));
-  //       //m = Mat4.multiply(m, Mat4Transform.rotateAroundY(0));
-  //       TransformNode rotateUpper = new TransformNode("upper arm rotate", m); //Mat4Transform.rotateAroundZ(-30));
-  // this.upperAngle = 0;
+    rotateHead.setTransform(Mat4Transform.rotateAroundZ(20));
+    rotateHead.update();
 
-  //m = new Mat4(1);
-        // m = Mat4.multiply(m, Mat4Transform.rotateAroundZ(this.upperAngle));
-        // //m = Mat4.multiply(m, Mat4Transform.rotateAroundY(0));
-        // TransformNode rotateUpper = new TransformNode("upper arm rotate", m); //Mat4Transform.rotateAroundZ(-30));
+    rotateUpper.setTransform(Mat4Transform.rotateAroundZ(this.upperAngle));
+    //rotateUpper.setTransform(Mat4Transform.translate(0, 0, 0.5f));
+    rotateUpper.update();
 
-  //System.out.println("&&&&&");
+    //rotateHead.setTransform(Mat4Transform.rotateAroundZ(30));
+    rotateLowerY.setTransform(Mat4Transform.rotateAroundY(0));
+    rotateLowerY.update();
 
-  rotateLamp.setTransform(Mat4Transform.rotateAroundY(0));
-  rotateLamp.update();
+    //rotateHead.setTransform(Mat4Transform.rotateAroundZ(30));
+    rotateLowerZ.setTransform(Mat4Transform.rotateAroundZ(30));
+    rotateLowerZ.update();
 
-  lamp1MoveTranslate.setTransform(Mat4Transform.translate(-5f, 0f, 0f));
-  lamp1MoveTranslate.update();
-
-  uArmTranslate.setTransform(Mat4Transform.translate(1.5f, 3.25f, 0f));
-  uArmTranslate.update();
-
-  rotateHead.setTransform(Mat4Transform.rotateAroundZ(20));
-  rotateHead.update();
-
-  rotateUpper.setTransform(Mat4Transform.rotateAroundZ(this.upperAngle));
-  //rotateUpper.setTransform(Mat4Transform.translate(0, 0, 0.5f));
-  rotateUpper.update();
-
-  //rotateHead.setTransform(Mat4Transform.rotateAroundZ(30));
-  rotateLowerY.setTransform(Mat4Transform.rotateAroundY(0));
-  rotateLowerY.update();
-
-  //rotateHead.setTransform(Mat4Transform.rotateAroundZ(30));
-  rotateLowerZ.setTransform(Mat4Transform.rotateAroundZ(30));
-  rotateLowerZ.update();
-
-  lamp1MoveTranslate.setTransform(Mat4Transform.translate(-5f, 0f, 0f));
-
-  // System.out.println("Here");
-  //uArm.update();
-  //head.update();
-  //rotateHead.update();
-
-  //translateLamp.setTransform(Mat4Transform.rotateAroundY(0));
-  // lArmRotate.setTransform(Mat4Transform.rotateAroundZ(0));
-  //translateLamp.update();
-  // lArmRotate.update();
+    lamp1MoveTranslate.setTransform(Mat4Transform.translate(-5f, 0f, 0f));
   }
 
   public void lamp1Position2() {
@@ -935,12 +877,6 @@ public class M04_GLEventListener implements GLEventListener {
     rotateLowerZ.setTransform(Mat4Transform.rotateAroundZ(-20));
     rotateLowerZ.update();
 
-    //rotateUpper.update();
-
-    // //uArmHeight = 2.5f
-    // //rotateUpper.setTransform(Mat4Transform.translate(0f, (float)(2.5f*Math.sin(30)), -1f));
-    // m = new Mat4(1);
-    // m = Mat4.multiply(m, Mat4Transform.rotateAroundZ(30));
     uArmTranslate.setTransform(Mat4Transform.translate(-0.3f, (float)(3.5f), 0f));
     uArmTranslate.update();
 
@@ -956,86 +892,12 @@ public class M04_GLEventListener implements GLEventListener {
 
     lamp1MoveTranslate.setTransform(Mat4Transform.translate(-5f, 0f, 0f));
 
-    // rotateUpper.setTransform(Mat4Transform.rotateAroundZ(-30));
-    // //rotateUpper.setTransform(Mat4Transform.translate(0, 0, 0.5f));
-    // rotateUpper.update();
-
-    // //rotateHead.setTransform(Mat4Transform.rotateAroundZ(30));
-    // rotateLowerY.setTransform(Mat4Transform.rotateAroundY(90));
-    // rotateLowerY.update();
-
-
-    // this.uArmAngleY = -90;
-    // // this.uArmAngleZ = -30;
-    // this.uArmTranslateX = -6.6f;
-    // this.uArmTranslateY = -0.17f;
-    // this.uArmTranslateZ = -0.6f;
-
-
-    // this.lArmAngleY = -90;
-    // this.lArmAngleZ = 40;
-    // this.lArmTranslateZ = -0.6f;
-    // this.lArmTranslateX = -4.5f;
-
-    // this.headAngleZ = 0;
-
-    // this.jointTranslateX = -7.6f;
-    // this.jointTranslateY = 2.85f;
-    // this.jointTranslateZ = -2.1f;
-    //this.lArmTranslateZ = 0;
-    //lArmAngleZ, lArmAngleY, uArmAngleZ, headZ, 
-    //this.lArmTranslateZ -= 1;
-    //this.lArmTranslateX -= 3;
-
-    //translateLamp.addChild(base);
-    
-    //System.out.println("*");
-
     rotateHead.setTransform(Mat4Transform.rotateAroundZ(20));
     rotateHead.update();
-
-    // translateLamp.setTransform(Mat4Transform.rotateAroundY(-90));
-    // // lArmRotate.setTransform(Mat4Transform.rotateAroundZ(-90));
-    // translateLamp.update();
-    // // lArmRotate.update();
-
-  
 
   }
 
   public void lamp1Position3() {
-    // // translateLamp.setTransform(Mat4Transform.rotateAroundY(90));
-    // // // lArmRotate.setTransform(Mat4Transform.rotateAroundZ(90));
-    // // translateLamp.update();
-    // // // lArmRotate.update();
-
-    // //--------New transform--------
-    // rotateHead.setTransform(Mat4Transform.rotateAroundZ(60));
-    // rotateHead.update();
-
-
-    // //rotateHead.setTransform(Mat4Transform.rotateAroundZ(30));
-    // rotateLowerZ.setTransform(Mat4Transform.rotateAroundZ(50));
-    // rotateLowerZ.update();
-
-    // // //rotateUpper.update();
-
-    // // // //uArmHeight = 2.5f
-    // // // //rotateUpper.setTransform(Mat4Transform.translate(0f, (float)(2.5f*Math.sin(30)), -1f));
-    // // // m = new Mat4(1);
-    // // // m = Mat4.multiply(m, Mat4Transform.rotateAroundZ(30));
-    // // uArmTranslate.setTransform(Mat4Transform.translate(-0.3f, (float)(2.5f), -3f));
-    // // uArmTranslate.update();
-
-    // // rotateUpper.setTransform(Mat4Transform.rotateAroundZ(-40));
-    // // rotateUpper.update();
-
-
-    // rotateHead.setTransform(Mat4Transform.rotateAroundZ(70));
-    // rotateHead.update();
-
-    // rotateLowerY.setTransform(Mat4Transform.rotateAroundY(65));
-    // rotateLowerY.update();
 
     uArmTranslate.setTransform(Mat4Transform.translate(1.5f, 3.25f, 0f));
     uArmTranslate.update();
@@ -1083,12 +945,6 @@ public class M04_GLEventListener implements GLEventListener {
     //lArm2Transform.update();
     
   }
-
-  // private Mat4 getMforLampArmLower() {
-  //   Mat4 modelMatrix = new Mat4(1);
-  //   modelMatrix = Mat4.multiply(Mat4Transform.rotateAroundZ(45), modelMatrix);
-  //   return modelMatrix;
-  // }
 
 
   // ***************************************************
