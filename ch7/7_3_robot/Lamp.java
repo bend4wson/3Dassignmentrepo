@@ -1,3 +1,103 @@
+import gmaths.*;
+//import Math;
+
+import java.nio.*;
+import com.jogamp.common.nio.*;
+import com.jogamp.opengl.*;
+import com.jogamp.opengl.util.*;
+import com.jogamp.opengl.util.awt.*;
+import com.jogamp.opengl.util.glsl.*;
+
+
+//   public void initialise(GL3 gl) {
+//     createRandomNumbers();
+
+//     Mesh mesh = new Mesh(gl, TwoTriangles.vertices.clone(), TwoTriangles.indices.clone());
+//     Shader shader = new Shader(gl, "vs_tt_05.txt", "fs_tt_05.txt");
+//     Shader shaderStatic = new Shader(gl, "vs_tt_05_static.txt", "fs_tt_05.txt");
+//     Shader shaderWindow = new Shader(gl, "vs_tt_05_static.txt", "fs_tt_05_window.txt");
+
+//     //int[] textureId0 = TextureLibrary.loadTexture(gl, "textures/chequerboard.jpg");
+//     int[] textureId1 = TextureLibrary.loadTexture(gl, "textures/jade.jpg");
+//     int[] textureId2 = TextureLibrary.loadTexture(gl, "textures/jade_specular.jpg");
+//     int[] textureId3 = TextureLibrary.loadTexture(gl, "textures/container2.jpg");
+//     int[] textureId4 = TextureLibrary.loadTexture(gl, "textures/woodCeiling3.jpg");
+//     //int[] textureId5 = TextureLibrary.loadTexture(gl, "textures/wattBook.jpg");
+//     int[] textureId6 = TextureLibrary.loadTexture(gl, "textures/wattBook_specular.jpg");
+//     int[] textureId7 = TextureLibrary.loadTexture(gl, "textures/ear0xuu2.jpg");
+//     int[] textureId8 = TextureLibrary.loadTexture(gl, "textures/cloud2.jpg");
+//     int[] textureId9 = TextureLibrary.loadTexture(gl, "textures/medievalTown.jpg");
+//     int[] textureId0 = TextureLibrary.loadTexture(gl, "textures/mar0kuu2_specular.jpg");
+//     int[] textureId11 = TextureLibrary.loadTexture(gl, "textures/woodWallColours.jpg");
+//     int[] textureId12 = TextureLibrary.loadTexture(gl, "textures/woodFloor2.jpg");
+//     int[] textureId13 = TextureLibrary.loadTexture(gl, "textures/woodCeiling3.jpg");
+//     int[] textureId14 = TextureLibrary.loadTexture(gl, "textures/glass.jpg");
+
+//     //lampLight1.setCamera(camera);
+//     lampLight1 = new Light(gl);
+//     lampLight1.setCamera(camera);
+//     light2 = new Light(gl);
+//     light2.setCamera(camera);
+//     light3 = new Light(gl);
+//     light3.setCamera(camera);
+//     light4 = new Light(gl);
+//     light4.setCamera(camera);
+
+// //----------------------//----------------------//----------------------//----------------------//----------------------
+//     // double elapsedTime = getSeconds() - startTime;
+//     // shader.use(gl);
+//     // double t = elapsedTime*0.1;
+//     // float offsetX = (float)(t - Math.floor(t));
+//     // float offsetY = 0.0f;
+//     // shader.setFloat(gl, "offset", offsetX, offsetY);
+    
+//     // shader.setInt(gl, "first_texture", 0);
+//     // shader.setInt(gl, "second_texture", 1);
+
+//     // gl.glActiveTexture(GL.GL_TEXTURE0);
+//     // gl.glBindTexture(GL.GL_TEXTURE_2D, textureId1);
+//     // gl.glActiveTexture(GL.GL_TEXTURE1);
+//     // gl.glBindTexture(GL.GL_TEXTURE_2D, textureId2);
+  
+//     // gl.glBindVertexArray(vertexArrayId[0]);
+//     // gl.glDrawElements(GL.GL_TRIANGLES, indices.length, GL.GL_UNSIGNED_INT, 0);
+//     // gl.glBindVertexArray(0);
+    
+//     // gl.glActiveTexture(GL.GL_TEXTURE0);
+// //----------------------//----------------------//----------------------//----------------------//----------------------
+//     //lightShader = new Shader(gl, "vs_light_01.txt", "fs_light_01.txt");
+//     //lampLight1 = new Model(gl, camera, light, lightShader, material, modelMatrix, mesh, textureId4, textureId4);
+
+
+//     Material material = new Material(new Vec3(1f, 1f, 1f), new Vec3(1.0f, 1.0f, 1.0f), new Vec3(0.3f, 0.3f, 0.3f), 32.0f);
+//     Mat4 modelMatrix = Mat4Transform.scale(16,1f,16);
+//     ttFloor = new Model(gl, camera, lampLight1, shaderStatic, material, modelMatrix, mesh, textureId12);
+//     ttWindow = new Model(gl, camera, lampLight1, shaderWindow, material, modelMatrix, mesh, textureId14);
+//     ttWall = new Model(gl, camera, lampLight1, shaderStatic, material, modelMatrix, mesh, textureId11);
+//     ttBackground = new Model(gl, camera, lampLight1, shader, material, modelMatrix, mesh, textureId9);
+//     ttCeiling = new Model(gl, camera, light3, shaderStatic, material, modelMatrix, mesh, textureId13);
+
+//     mesh = new Mesh(gl, Cube.vertices.clone(), Cube.indices.clone());
+//     shader = new Shader(gl, "vs_cube_04.txt", "fs_cube_04.txt");
+//     material = new Material(new Vec3(1.0f, 0.5f, 0.31f), new Vec3(1.0f, 0.5f, 0.31f), new Vec3(0.5f, 0.5f, 0.5f), 32.0f);
+//     modelMatrix = Mat4.multiply(Mat4Transform.scale(4, 4, 4), Mat4Transform.translate(0, 0.5f, 0));
+//     cube = new Model(gl, camera, lampLight1, shader, material, modelMatrix, mesh, textureId4, textureId4);
+//     cube2 = new Model(gl, camera, lampLight1, shader, material, modelMatrix, mesh, textureId0, textureId0);
+//     cube3 = new Model(gl, camera, lampLight1, shader, material, modelMatrix, mesh, textureId0, textureId0);
+//     cube4 = new Model(gl, camera, lampLight1, shader, material, modelMatrix, mesh, textureId0, textureId0);
+//     cube5 = new Model(gl, camera, lampLight1, shader, material, modelMatrix, mesh, textureId0, textureId0);
+//     cube6 = new Model(gl, camera, lampLight1, shader, material, modelMatrix, mesh, textureId3, textureId3);
+
+//     tableLeg = new Model(gl, camera, lampLight1, shader, material, modelMatrix, mesh, textureId13, textureId13);
+
+//     mesh = new Mesh(gl, Sphere.vertices.clone(), Sphere.indices.clone());
+//     shader = new Shader(gl, "vs_cube_04.txt", "fs_cube_04.txt");
+//     material = new Material(new Vec3(1.0f, 0.5f, 0.31f), new Vec3(1.0f, 0.5f, 0.31f), new Vec3(0.5f, 0.5f, 0.5f), 32.0f);
+//     modelMatrix = Mat4.multiply(Mat4Transform.scale(4,4,4), Mat4Transform.translate(0,0.5f,0));
+//     sphere = new Model(gl, camera, lampLight1, shader, material, modelMatrix, mesh, textureId1, textureId2);
+//     jointSphere = new Model(gl, camera, lampLight1, shader, material, modelMatrix, mesh, textureId0, textureId0);
+//   }
+
 public class Lamp {
     private Model cube, cube2, cube3, cube4, cube5, cube6, lightCube1, lightCube2, sphere, jointSphere, tableLeg, ttWall, ttFloor, ttWindow, ttCeiling, ttBackground;
     private SGNode lampRoot;
@@ -5,6 +105,24 @@ public class Lamp {
     private SGNode createLamp(num) {//, int lArmAngleZ, lArmAngleY, uArmAngleZ, headAngleZ)
         //if num == 1:
             //System.out.println("***");
+            if (num == 1){
+                Vec3 lamp1MoveVec = new Vec3(-5f, 0f, 0f);
+                int rotateLampY = 0;
+                float lowerYAngle = 0;
+                float lowerZAngle = 30;
+                float upperAngle = -60;
+                float headLightAngle = 20f;
+            }
+
+            else if (num == 2) {
+                Vec3 lamp1MoveVec = new Vec3(5f, 0f, 0f);
+                int rotateLampY = 0;
+                float lowerYAngle = 0;
+                float lowerZAngle = -30;
+                float upperAngle = 60;
+                float headLightAngle = -20f;
+            }
+
             float baseHeight = 0.35f;
             float baseScale = 1.5f;
             float jointScale = 0.75f;
@@ -16,10 +134,8 @@ public class Lamp {
             float lArmHeight = 2.5f;
             float lArmScale = 0.35f;
             float lampLight1Scale = 0.25f;
-            float headLightAngle = 20f;
+            // float headLightAngle = 20f;
 
-            float lowerYAngle = 0;
-            float lowerZAngle = 30;
 
             SGNode lampRoot = new NameNode("lamp-branch-structure");
             //translateLamp = new TransformNode("lamp 1 transform",Mat4Transform.translate(xPosition,0,0));
@@ -36,7 +152,7 @@ public class Lamp {
 
                                                                                     //Prev (xPosition, 0, 0)
             rotateLamp = new TransformNode("rotateLamp",Mat4Transform.translate(xPosition,0,0));
-            lamp1MoveTranslate = new TransformNode("lamp1MoveTranslate",Mat4Transform.translate(-5f,0,0));
+            lamp1MoveTranslate = new TransformNode("lamp1MoveTranslate",Mat4Transform.translate(lamp1MoveVec));
 
             System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             NameNode base = new NameNode("base");
@@ -55,9 +171,9 @@ public class Lamp {
 
             //rotateLowerZ = new TransformNode("Rotate Lower",Mat4Transform.translate(xPosition,0,0));
 
-                rotateLamp = new TransformNode("rotateLamp", Mat4Transform.rotateAroundY(0));
+                rotateLamp = new TransformNode("rotateLamp", Mat4Transform.rotateAroundY(rotateLampY));
 
-            System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+            // System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
 
             NameNode lArm = new NameNode("lArm"); 
                 TransformNode lArmPosTransform = new TransformNode("lArmPosTransform", Mat4Transform.translate(0, 0, 0));
@@ -93,7 +209,7 @@ public class Lamp {
 
             //rotateUpper = new TransformNode("Rotate Upper", Mat4Transform.translate(xPosition,0,0));
 
-            System.out.println("||||||||||||||||||||||||||||||||||||");
+            // System.out.println("||||||||||||||||||||||||||||||||||||");
 
             NameNode joint = new NameNode("joint");
                 //Mat4Transform.translate((bodyWidth*0.5f)+(armScale*0.5f),bodyHeight,0));
@@ -108,7 +224,7 @@ public class Lamp {
                 
 
             NameNode uArm = new NameNode("uArm"); 
-                rotateUpper = new TransformNode("rotateUpper (" + this.upperAngle + ")", Mat4Transform.rotateAroundZ(this.upperAngle)); //Mat4Transform.rotateAroundZ(-30));
+                rotateUpper = new TransformNode("rotateUpper (" + upperAngle + ")", Mat4Transform.rotateAroundZ(upperAngle)); //Mat4Transform.rotateAroundZ(-30));
                 //rotateUpper = new TransformNode("rotateUpper (" + this.upperAngle + ")", Mat4Transform.rotateAroundZ(this.upperAngle));
 
 
@@ -163,7 +279,7 @@ public class Lamp {
             //     TransformNode lampLight1Transform = new TransformNode("lamp light 1 transform", m);
             //       ModelNode lampLight1Shape = new ModelNode("Cube(light)", lampLight1);
 
-            System.out.println("{{{{{{{{{{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}}}}}}}}}");
+            // System.out.println("{{{{{{{{{{{{{{{{{{{{{{{{{}}}}}}}}}}}}}}}}}}}}}}}}}");
 
             lampRoot.addChild(lamp1MoveTranslate);
             //Do I need lamp1MoveTranslate here?
