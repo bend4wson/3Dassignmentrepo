@@ -13,9 +13,9 @@ import com.jogamp.opengl.util.glsl.*;
 //     createRandomNumbers();
 
 //     Mesh mesh = new Mesh(gl, TwoTriangles.vertices.clone(), TwoTriangles.indices.clone());
-//     Shader shader = new Shader(gl, "vs_tt_05.txt", "fs_tt_05.txt");
-//     Shader shaderStatic = new Shader(gl, "vs_tt_05_static.txt", "fs_tt_05.txt");
-//     Shader shaderWindow = new Shader(gl, "vs_tt_05_static.txt", "fs_tt_05_window.txt");
+//     Shader shader = new Shader(gl, "vertexShaders/vs_tt_05.txt", "fragmentShaders/fs_tt_05.txt");
+//     Shader shaderStatic = new Shader(gl, "vertexShaders/vs_tt_05_static.txt", "fragmentShaders/fs_tt_05.txt");
+//     Shader shaderWindow = new Shader(gl, "vertexShaders/vs_tt_05_static.txt", "fragmentShaders/fs_tt_05_window.txt");
 
 //     //int[] textureId0 = TextureLibrary.loadTexture(gl, "textures/chequerboard.jpg");
 //     int[] textureId1 = TextureLibrary.loadTexture(gl, "textures/jade.jpg");
@@ -65,7 +65,7 @@ import com.jogamp.opengl.util.glsl.*;
     
 //     // gl.glActiveTexture(GL.GL_TEXTURE0);
 // //----------------------//----------------------//----------------------//----------------------//----------------------
-//     //lightShader = new Shader(gl, "vs_light_01.txt", "fs_light_01.txt");
+//     //lightShader = new Shader(gl, "vertexShaders/vs_light_01.txt", "fs_light_01.txt");
 //     //lampLight1 = new Model(gl, camera, light, lightShader, material, modelMatrix, mesh, textureId4, textureId4);
 
 
@@ -78,7 +78,7 @@ import com.jogamp.opengl.util.glsl.*;
 //     ttCeiling = new Model(gl, camera, light3, shaderStatic, material, modelMatrix, mesh, textureId13);
 
 //     mesh = new Mesh(gl, Cube.vertices.clone(), Cube.indices.clone());
-//     shader = new Shader(gl, "vs_cube_04.txt", "fs_cube_04.txt");
+//     shader = new Shader(gl, "vertexShaders/vs_cube_04.txt", "fs_cube_04.txt");
 //     material = new Material(new Vec3(1.0f, 0.5f, 0.31f), new Vec3(1.0f, 0.5f, 0.31f), new Vec3(0.5f, 0.5f, 0.5f), 32.0f);
 //     modelMatrix = Mat4.multiply(Mat4Transform.scale(4, 4, 4), Mat4Transform.translate(0, 0.5f, 0));
 //     cube = new Model(gl, camera, lampLight1, shader, material, modelMatrix, mesh, textureId4, textureId4);
@@ -91,7 +91,7 @@ import com.jogamp.opengl.util.glsl.*;
 //     tableLeg = new Model(gl, camera, lampLight1, shader, material, modelMatrix, mesh, textureId13, textureId13);
 
 //     mesh = new Mesh(gl, Sphere.vertices.clone(), Sphere.indices.clone());
-//     shader = new Shader(gl, "vs_cube_04.txt", "fs_cube_04.txt");
+//     shader = new Shader(gl, "vertexShaders/vs_cube_04.txt", "fs_cube_04.txt");
 //     material = new Material(new Vec3(1.0f, 0.5f, 0.31f), new Vec3(1.0f, 0.5f, 0.31f), new Vec3(0.5f, 0.5f, 0.5f), 32.0f);
 //     modelMatrix = Mat4.multiply(Mat4Transform.scale(4,4,4), Mat4Transform.translate(0,0.5f,0));
 //     sphere = new Model(gl, camera, lampLight1, shader, material, modelMatrix, mesh, textureId1, textureId2);
